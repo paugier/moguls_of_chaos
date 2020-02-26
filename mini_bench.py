@@ -105,19 +105,23 @@ def bench():
 
 
 bench_pythran = jit(bench)
+bench_numba = jit(backend="numba")(bench)
 
 
 if __name__ == "__main__":
 
     from transonic.util import timeit_verbose as timeit
 
-    norm = timeit("bench()", globals=locals())
-    timeit("bench_pythran()", globals=locals(), norm=norm)
+    g = locals()
+    norm = timeit("bench()", globals=g)
+    timeit("bench_pythran()", globals=g, norm=norm)
+    timeit("bench_numba()", globals=g, norm=norm)
 
 """
 bench                            : 1.000 * norm
 norm = 8.35e-01 s
 bench_pythran                    : 0.007 * norm
+bench_numba                      : 0.009 * norm
 
 (~140 speedup!)
 
